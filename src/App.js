@@ -1,26 +1,37 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import Table from './components/table';
 
-class App extends Component {
+class App extends Component { 
+    constructor(props){
+        super(props);
+        
+        this.state = {
+            field: [
+                [0, 0, 0, 0, 0, 1],
+                [0, 0, 0, 0, 0, 2],
+                [0, 0, 0, 2, 1, 1],
+                [0, 0, 0, 0, 1, 2],
+                [0, 0, 0, 0, 1, 2],
+                [0, 0, 1, 1, 1, 2],
+                [0, 0, 0, 2, 2, 1],
+            ],
+        }
+    }
+    
+    
+    clickColumn = (i) => {
+        const newField = [...this.state.field];
+        
+        newField[i] = [1, 1, 1, 1, 1, 1];
+        this.setState({field: newField});
+    }
+    
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+        <Table 
+            field={this.state.field}
+            onClickColumn = {this.clickColumn}    
+        />
     );
   }
 }
