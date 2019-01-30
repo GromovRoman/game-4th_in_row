@@ -7,7 +7,7 @@ export default class Cell extends React.Component {
         
         return(
             <div className='cell'
-                 onClick={this.props.onClickColumn}   
+                 onClick={this.props.onClickCell}   
             >
                 {this.props.data}
             </div>    

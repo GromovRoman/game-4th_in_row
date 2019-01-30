@@ -3,11 +3,12 @@ import Column from '../column';
 import './table.css';
 
 export default class Table extends React.Component {
-    renderColumn = (el, i) => {
+    renderColumn = (el, x) => {
         return <Column 
                     data={el}
-                    key={i}
+                    key={x}
                     onClickColumn={this.props.onClickColumn}
+                    x={x}
                 />
     }
     render() {

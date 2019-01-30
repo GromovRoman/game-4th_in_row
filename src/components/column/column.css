@@ -1,3 +1,6 @@
 .column {
-    
+    border-right: 1px solid black;
+}
+.column:last-child {
+    border: none;
 }

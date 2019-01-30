@@ -3,11 +3,11 @@ import Cell from '../cell';
 import './column.css';
 
 export default class Column extends React.Component {
-    showCell = (el, i) => {
+    showCell = (el, y) => {
         return <Cell 
-                    key={i}
+                    key={y}
                     data={el}
-                    onClickColumn={() => this.props.onClickColumn(i)} 
+                    onClickCell={() => this.props.onClickColumn(this.props.x, y)} 
                 />
     }
     render() {
