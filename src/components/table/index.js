@@ -13,9 +13,12 @@ export default class Table extends React.Component {
     }
     render() {
         return(
-            <div className='table'>
-                {this.props.field.map(this.renderColumn)}
-            </div>
+            <>
+                <div>Сейчас ходит: {this.props.curPalyer? this.props.player_1: this.props.player_2}</div>
+                <div className='table'>
+                    {this.props.field.map(this.renderColumn)}
+                </div>
+            </>
         );
     }
 } 
