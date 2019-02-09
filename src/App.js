@@ -10,8 +10,8 @@ class App extends Component {
             <Router>
                 <Switch>
                     <Route exact path="/" component={StartScreen} />
-                    <Route exact path="/game" component={Game} />
-                    <Route exact path="/finish" component={Finish} />
+                    <Route exact path="/game/" component={Game} />
+                    <Route exact path="/finish/" component={Finish} />
                 </Switch>
             </Router>
         );

@@ -29,7 +29,7 @@ class StartScreen extends React.Component {
                 <input id='player_2' type='text' onChange={this.setNamePlayer} value={this.state.setName_player_2}/>     
                 <Link 
                     to={{
-                        pathname: "/game",
+                        pathname: "/game/",
                         state: {
                             fromStartScreen: true,
                             palyer_1: this.state.player_1,

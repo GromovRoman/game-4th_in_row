@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Table from '../table';
 import Button from '../button';
 import {Redirect} from 'react-router';
+import axios from 'axios';
 
 class Game extends Component { 
     
@@ -9,20 +10,25 @@ class Game extends Component {
         super(props);
         
         this.state = {
-            field: [
-                [null, null, null, null, null, null],
-                [null, null, null, null, null, null],
-                [null, null, null, null, null, null],
-                [null, null, null, null, null, null],
-                [null, null, null, null, null, null],
-                [null, null, null, null, null, null],
-                [null, null, null, null, null, null],
-            ],
+            field: [],
             isPlayer_1: true,
             winner: false,
         }
     }
-    
+
+    componentDidMount() {
+        this.updateField();
+        setInterval(this.updateField, 1000);
+    }
+
+    updateField = () => {
+        axios.get('http://localhost:5000/field').then((response) => {
+            this.setState({
+                field: response.data,
+            });
+        });
+    }
+
     cloneField(x) {
         /*копируем массив field из state и заменяем уолонку с которой будем работать*/
         let newField = [...this.state.field]; 
@@ -164,7 +170,7 @@ class Game extends Component {
         }
     }
 
-    clickColumn = (x, y) => {
+    clickColumnQ = (x, y) => {
         /*Проверяем занята ли ячейка*/
         if(this.state.field[x][y] !== null) {
             return;
@@ -202,7 +208,14 @@ class Game extends Component {
             isPlayer_1: !this.state.isPlayer_1, 
         });
     }
-    
+    clickColumn = () => {
+        axios.post('http://localhost:5000/move', {columnId: 1}).then((response) => {
+            console.log(response.data);
+            this.setState({
+                field: response.data,
+            });
+        });
+    }
     restart = () => {
         this.setState({
             field: [
@@ -223,13 +236,14 @@ class Game extends Component {
           return <Redirect to='/' />
         }
     }
+
   render() {
     if (!this.props.location.state || !this.props.location.state.fromStartScreen) {
         return <Redirect to='/' />
     }
     if (this.state.winner || this.state.winner === null) {
         return <Redirect to={{
-            pathname: '/finish',
+            pathname: '/finish/',
             state: {
                 winner: this.state.winner,
             }
