@@ -208,9 +208,11 @@ class Game extends Component {
             isPlayer_1: !this.state.isPlayer_1, 
         });
     }
-    clickColumn = () => {
-        axios.post('http://localhost:5000/move', {columnId: 1}).then((response) => {
-            console.log(response.data);
+
+    clickColumn = (cell_x, cell_y) => {
+        console.log(cell_x);
+        console.log(cell_y);
+        axios.post('http://localhost:5000/move', {x: cell_x, y: cell_y}).then((response) => {
             this.setState({
                 field: response.data,
             });
