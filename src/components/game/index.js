@@ -18,7 +18,11 @@ class Game extends Component {
 
     componentDidMount() {
         this.updateField();
-        setInterval(this.updateField, 1000);
+        this.timer = setInterval(this.updateField, 1000);
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timer);
     }
 
     updateField = () => {
@@ -27,58 +31,6 @@ class Game extends Component {
                 field: response.data,
             });
         });
-    }
-
-    cloneField(x) {
-        /*копируем массив field из state и заменяем уолонку с которой будем работать*/
-        let newField = [...this.state.field]; 
-        
-        newField[x] = [...this.state.field[x]]
-        
-        return newField;
-    }
-    
-    trackCurrentPlayer() {
-        /*узнаем какой игрок ходит и устанавливаем его фишку*/
-        const newCell = this.state.isPlayer_1? 'X': 'O';
-        return newCell;
-    }
-    
-    getIndexToBellowEmptyCell(arrColumn, y) {
-        /*Проверяем есть ли пустые поля ниже выбранной ячейки, если ДА, возвращаем её индекс*/
-        for(let i = arrColumn.length -1; i >= y; i--) {
-            if(arrColumn[i] === null) {
-                return i;
-            }
-        }
-    }
-
-    checkAxis_X(x, y, curTrack) {
-        let count = 1,
-            step = 1;
-
-        /*проверяем влево от текущего*/
-        while(this.state.field[x - step] !== undefined && this.state.field[x - step][y] === curTrack) {
-            if(count !== 4) {
-                count++;
-                step++;
-            }
-        }
-        step = 1;
-        
-        /*проверяем вправо от текущего*/
-        while(this.state.field[x + step] !== undefined && this.state.field[x + step][y] === curTrack) {
-            if(count !== 4) {
-                count++;
-                step++;
-            }
-        }
-        
-        if(count >= 4) {
-            this.setState({
-                winner: curTrack === 'X'? this.props.location.state.palyer_1: this.props.location.state.palyer_2,
-            });
-        }
     }
 
     checkAxis_Y(x, y, curTrack) {
@@ -209,15 +161,23 @@ class Game extends Component {
         });
     }
 
-    clickColumn = (cell_x, cell_y) => {
-        console.log(cell_x);
-        console.log(cell_y);
-        axios.post('http://localhost:5000/move', {x: cell_x, y: cell_y}).then((response) => {
+    clickColumn = (x, y) => {
+        axios.post('http://localhost:5000/move', {
+            x: x, 
+            y: y,
+            player: this.props.location.state.palyer_1, 
+        }).then((response) => {
+            response.data.winner?
+            this.setState({
+                field: response.data.field,
+                winner: response.data.winner,
+            }):
             this.setState({
                 field: response.data,
             });
         });
     }
+
     restart = () => {
         this.setState({
             field: [
