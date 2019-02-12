@@ -18,7 +18,11 @@ class Game extends Component {
 
     componentDidMount() {
         this.updateField();
-        this.timer = setInterval(this.updateField, 1000);
+        this.updateWinner();
+        this.timer = setInterval(() => {
+            this.updateField();
+            this.updateWinner();
+        }, 300);
     }
 
     componentWillUnmount() {
@@ -33,93 +37,12 @@ class Game extends Component {
         });
     }
 
-    checkAxis_Y(x, y, curTrack) {
-        let count = 1,
-            step = 1;
-
-        /*проверяем вверх от текущего*/
-        while(this.state.field[y - step] !== undefined && this.state.field[x][y - step] === curTrack) {
-            if(count !== 4) {
-                count++;
-                step++;
-            }
-        }
-        step = 1;
-        
-        /*проверяем вниз от текущего*/
-        while(this.state.field[y + step] !== undefined && this.state.field[x][y + step] === curTrack) {
-            if(count !== 4) {
-                count++;
-                step++;
-            }
-        }
-        
-        if(count >= 4) {
+    updateWinner = () => {
+        axios.post('http://localhost:5000/winner').then((response) => {
             this.setState({
-                winner: curTrack === 'X'? this.props.location.state.palyer_1: this.props.location.state.palyer_2,
-            })
-        }
-    }
-
-    checkAxis_XY(x, y, curTrack) {
-        let count = 1,
-            step = 1;
-        /*проверяем вверх и влево от текущего*/
-        while(this.state.field[x - step] !== undefined &&
-            this.state.field[x][y - step] !== undefined &&
-            this.state.field[x - step][y - step] === curTrack) {
-            if(count !== 4) {
-                count++;
-                step++;
-            }
-        }
-        step = 1;
-        /*проверяем вниз и вправо от текущего*/
-        while(this.state.field[x + step] !== undefined &&
-            this.state.field[x][y + step] !== undefined &&
-            this.state.field[x + step][y + step] === curTrack) {
-            if(count !== 4) {
-                count++;
-                step++;
-            }
-        }
-        
-        if(count >= 4) {
-            this.setState({
-                winner: curTrack === 'X'? this.props.location.state.palyer_1: this.props.location.state.palyer_2,
-            })
-        }
-    }
-    
-    checkAxis_YX(x, y, curTrack) {
-        let count = 1,
-            step = 1;
-        /*проверяем вверх и вправо от текущего*/
-        while(this.state.field[x + step] !== undefined &&
-            this.state.field[x][y - step] !== undefined &&
-            this.state.field[x + step][y - step] === curTrack) {
-            if(count !== 4) {
-                count++;
-                step++;
-            }
-        }
-        step = 1;
-        /*проверяем вниз и влево от текущего*/
-        while(this.state.field[x - step] !== undefined &&
-            this.state.field[x][y + step] !== undefined &&
-            this.state.field[x - step][y + step] === curTrack) {
-            if(count !== 4) {
-                count++;
-                step++;
-            }
-        }
-        
-        if(count >= 4) {
-            this.setState({
-                winner: curTrack === 'X'? this.props.location.state.palyer_1: this.props.location.state.palyer_2,
-            })
-            
-        }
+                winner: response.data,
+            });
+        });
     }
 
     clickColumnQ = (x, y) => {
@@ -165,13 +88,8 @@ class Game extends Component {
         axios.post('http://localhost:5000/move', {
             x: x, 
             y: y,
-            player: this.props.location.state.palyer_1, 
+            playerToken: this.props.location.state.palyer_1, 
         }).then((response) => {
-            response.data.winner?
-            this.setState({
-                field: response.data.field,
-                winner: response.data.winner,
-            }):
             this.setState({
                 field: response.data,
             });
