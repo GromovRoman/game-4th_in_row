@@ -1,3 +1,8 @@
+* Для начала игры, нужно скачать и запустить [сервер](https://github.com/GromovRoman/server_for_4th_in_rowr)
+* Скачатьи запустить саму игру
+* Имя первого играка вводится в левом верхнем поле
+* Запустить новое окно в режиме инкогнито, зати на localhost, ввести имя второго игрока также в левом верхнем поле
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
